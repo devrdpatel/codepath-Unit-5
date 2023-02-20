@@ -31,6 +31,7 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
+
 Signing up as a new user...
 <img src='https://github.com/devrdpatel/codepath-Unit-5/blob/main/BeRealGIF1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
