@@ -28,7 +28,7 @@ class FeedViewController: UIViewController {
         
         refreshControl.tintColor = .systemGray
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching Latest Feed ...", attributes: .none)
-        refreshControl.addTarget(self, action: #selector(viewWillAppear(_:)), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(fetchNewPosts), for: .valueChanged)
         
         tableView.refreshControl = refreshControl
         // Do any additional setup after loading the view.
@@ -40,7 +40,7 @@ class FeedViewController: UIViewController {
         queryPosts()
     }
     
-    private func fetchNewPosts(_ sender: Any) {
+    @objc private func fetchNewPosts(_ sender: Any) {
         queryPosts()
     }
     
@@ -49,9 +49,13 @@ class FeedViewController: UIViewController {
         // 2. Any properties that are Parse objects are stored by reference in Parse DB and as such need to explicitly use `include_:)` to be included in query results.
         // 3. Sort the posts by descending order based on the created at date
         
+        let yesterdayDate = Calendar.current.date(byAdding: .day, value: (-1), to: Date())!
+        
         let query = Post.query()
             .include("user")
             .order([.descending("createdAt")])
+            .where("createdAt" >= yesterdayDate) // Only include posts that are less than 24 hours old
+            .limit(10) // Limit to 10 posts max
         
         // Fetch posts defined in query asynchronously
         query.find { [weak self] result in
@@ -79,6 +83,19 @@ class FeedViewController: UIViewController {
     }
     
     @IBOutlet weak var tableView: UITableView!
+    @IBAction func logoutButtonTapped(_ sender: Any) {
+        let alertController = UIAlertController(title: "Logout of \(User.current?.username ?? "current account")?", message: nil, preferredStyle: .alert)
+        
+        let logoutAction = UIAlertAction(title: "Log Out", style: .destructive) { _ in
+            NotificationCenter.default.post(name: Notification.Name("logout"), object: nil)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alertController.addAction(logoutAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+    }
     
     /*
     // MARK: - Navigation

@@ -146,12 +146,34 @@
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Anb-tw-nbR">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X66-5v-Oei">
                                                             <rect key="frame" x="0.0" y="28.333333333333343" width="393" height="393"/>
+                                                            <subviews>
+                                                                <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jXM-If-eir">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="393"/>
+                                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="HhW-mW-7Kl">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="393" height="393"/>
+                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    </view>
+                                                                    <blurEffect style="regular"/>
+                                                                </visualEffectView>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Anb-tw-nbR">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="393"/>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" secondItem="Anb-tw-nbR" secondAttribute="height" multiplier="1:1" id="8BG-Wr-co6"/>
+                                                                <constraint firstAttribute="bottom" secondItem="jXM-If-eir" secondAttribute="bottom" id="14M-Lf-w6L"/>
+                                                                <constraint firstItem="jXM-If-eir" firstAttribute="top" secondItem="X66-5v-Oei" secondAttribute="top" id="DfN-Ox-NKH"/>
+                                                                <constraint firstItem="Anb-tw-nbR" firstAttribute="leading" secondItem="X66-5v-Oei" secondAttribute="leading" id="J6g-7T-VAw"/>
+                                                                <constraint firstAttribute="trailing" secondItem="jXM-If-eir" secondAttribute="trailing" id="VAn-EI-mH8"/>
+                                                                <constraint firstItem="jXM-If-eir" firstAttribute="leading" secondItem="X66-5v-Oei" secondAttribute="leading" id="aql-Z9-vks"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Anb-tw-nbR" secondAttribute="trailing" id="bsB-ui-40J"/>
+                                                                <constraint firstAttribute="width" secondItem="X66-5v-Oei" secondAttribute="height" multiplier="1:1" id="oiK-r4-sE1"/>
+                                                                <constraint firstItem="Anb-tw-nbR" firstAttribute="top" secondItem="X66-5v-Oei" secondAttribute="top" id="qh3-P9-8aW"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Anb-tw-nbR" secondAttribute="bottom" id="z11-N2-i8A"/>
                                                             </constraints>
-                                                        </imageView>
+                                                        </view>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="VEt-FF-QlT">
                                                             <rect key="frame" x="0.0" y="429.33333333333331" width="64.333333333333329" height="54.666666666666686"/>
                                                             <subviews>
@@ -171,8 +193,7 @@
                                                         </stackView>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="Anb-tw-nbR" firstAttribute="leading" secondItem="0wq-BY-qwZ" secondAttribute="leadingMargin" id="KKV-e6-4DS"/>
-                                                        <constraint firstItem="Anb-tw-nbR" firstAttribute="trailing" secondItem="0wq-BY-qwZ" secondAttribute="trailingMargin" id="fjD-Cp-ex5"/>
+                                                        <constraint firstItem="X66-5v-Oei" firstAttribute="centerX" secondItem="0wq-BY-qwZ" secondAttribute="centerX" id="ApG-hH-RH2"/>
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
@@ -184,6 +205,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="blurImageView" destination="jXM-If-eir" id="ZZ5-J6-rpY"/>
                                             <outlet property="feedCaption" destination="cpv-hF-d43" id="RXt-4k-X35"/>
                                             <outlet property="feedImageView" destination="Anb-tw-nbR" id="Nxa-jl-7ik"/>
                                             <outlet property="feedPostDate" destination="ppE-PV-bSR" id="mNK-pP-Zak"/>
@@ -208,6 +230,9 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Logout" id="l1G-Kh-MWw">
                             <color key="tintColor" systemColor="labelColor"/>
+                            <connections>
+                                <action selector="logoutButtonTapped:" destination="7R7-kw-4fl" id="IiH-w6-gRy"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -227,14 +252,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rrN-up-Eyh">
-                                <rect key="frame" x="0.0" y="102.99999999999997" width="393" height="425.33333333333326"/>
+                                <rect key="frame" x="0.0" y="103.00000000000003" width="393" height="459.66666666666674"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Caption of your post" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eAx-9b-cyg">
-                                        <rect key="frame" x="18" y="0.0" width="357" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="34"/>
                                         <color key="backgroundColor" systemColor="secondaryLabelColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="357" id="fah-aw-qNT"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -252,7 +274,21 @@
                                             <constraint firstAttribute="width" secondItem="oN0-ML-PaU" secondAttribute="height" multiplier="1:1" id="qpi-cb-OEv"/>
                                         </constraints>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="ePq-LC-W3J">
+                                        <rect key="frame" x="135.66666666666666" y="425.33333333333331" width="121.66666666666666" height="34.333333333333314"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" systemColor="secondaryLabelColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Take a Photo"/>
+                                        <connections>
+                                            <action selector="takePhotoTapped:" destination="w8Z-oD-YKl" eventType="touchUpInside" id="khD-VJ-Edq"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="eAx-9b-cyg" secondAttribute="trailing" id="hNF-LB-EFw"/>
+                                    <constraint firstItem="eAx-9b-cyg" firstAttribute="leading" secondItem="rrN-up-Eyh" secondAttribute="leading" id="i3s-Mk-Qhh"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hD9-c4-Kag"/>

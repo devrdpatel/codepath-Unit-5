@@ -22,6 +22,20 @@ class PostViewController: UIViewController {
     @IBOutlet weak var captionField: UITextField!
     @IBOutlet weak var postImageView: UIImageView!
     
+    @IBAction func takePhotoTapped(_ sender: Any) {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print("❌📷 Camera not available")
+            return
+        }
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.sourceType = .camera
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        
+        present(imagePicker, animated: true)
+    }
     @IBAction func selectPhotosTapped(_ sender: Any) {
         // Also add Usage - Photo Privacy Description key to info.plst
         var config = PHPickerConfiguration()
@@ -72,9 +86,30 @@ class PostViewController: UIViewController {
                 switch result {
                 case .success(let post):
                     print("✅ Post Saved! \(post)")
+                    
+                    // Update user's last posted data
+                    if var currentUser = User.current {
 
-                    // Return to previous view controller
-                    self?.navigationController?.popViewController(animated: true)
+                        // Update the `lastPostedDate` property on the user with the current date.
+                        currentUser.lastPostedDate = Date()
+
+                        // Save updates to the user (async)
+                        currentUser.save { [weak self] result in
+                            switch result {
+                            case .success(let user):
+                                print("✅ User Saved! \(user)")
+
+                                // Switch to the main thread for any UI updates
+                                DispatchQueue.main.async {
+                                    // Return to previous view controller
+                                    self?.navigationController?.popViewController(animated: true)
+                                }
+
+                            case .failure(let error):
+                                self?.showAlert(description: error.localizedDescription)
+                            }
+                        }
+                    }
 
                 case .failure(let error):
                     self?.showAlert(description: error.localizedDescription)
@@ -132,5 +167,19 @@ extension PostViewController: PHPickerViewControllerDelegate {
                 }
             }
         }
+    }
+}
+
+extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        guard let image = info[.editedImage] as? UIImage else {
+            print("❌📷 Unable to get image")
+                    return
+        }
+        
+        postImageView.image = image
+        pickedImage = image
     }
 }

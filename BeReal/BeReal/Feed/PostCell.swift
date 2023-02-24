@@ -12,11 +12,13 @@ import AlamofireImage
 class PostCell: UITableViewCell {
 
     var imageDataRequest: DataRequest?
+    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
     
     @IBOutlet weak var usernameLabel: UILabel!
     
     @IBOutlet weak var feedCaption: UILabel!
     @IBOutlet weak var feedPostDate: UILabel!
+    @IBOutlet weak var blurImageView: UIVisualEffectView!
     @IBOutlet weak var feedImageView: UIImageView!
     
     func configure(with post: Post) {
@@ -49,6 +51,33 @@ class PostCell: UITableViewCell {
         if let date = post.createdAt {
             feedPostDate.text = DateFormatter.postFormatter.string(from: date)
         }
+        
+        // Blur View
+        visualEffectView.frame = feedImageView.bounds
+        
+        if let currentUser = User.current,
+
+            // Get the date the user last shared a post (cast to Date).
+           let lastPostedDate = currentUser.lastPostedDate,
+
+            // Get the date the given post was created.
+           let postCreatedDate = post.createdAt,
+            
+            // Get the difference in hours between when the given post was created and the current user last posted.
+           let diffHours = Calendar.current.dateComponents([.hour], from: lastPostedDate, to: Date()).hour {
+
+            // Hide the blur view if the given post was created within 24 hours of the current user's last post. (before or after)
+            //blurImageView.isHidden = abs(diffHours) < 24
+            visualEffectView.isHidden = abs(diffHours) < 24
+        } else {
+
+            // Default to blur if we can't get or compute the date's above for some reason.
+            //blurImageView.isHidden = false
+            //blurImageView.bringSubviewToFront(blurImageView.contentView)
+            //feedImageView.isHidden = true
+            visualEffectView.isHidden = false
+        }
+        feedImageView.addSubview(visualEffectView)
     }
     
     // Cancel Image load if cell goes out of view
